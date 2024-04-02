@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- <h1>hello</h1> -->
+    <script>
+    $ (document).ready(function() {
+$.ajax({
+url: "http://localhost/hifi11/js/demo/data.php",
+method: "GET",
+success: function(data) {
+
+    // console.log(data[0].name);
+
+    var name = [] ;
+var score = [];
+// var colors = [ ] ;
+for (var i in data) {
+name.push(data[i].name)
+score.push(data[i].score);
+// colors.push(color());
+}
+// console.log(score);
+
+
+},
+error: function (data) {
+console.log(data);
+}
+
+});
+
+
+
+});
+    </script>
+    <!-- <script src="chart.js"></script> -->
+</body>
+</html>

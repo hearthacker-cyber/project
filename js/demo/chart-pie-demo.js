@@ -1,15 +1,37 @@
+
+    $ (document).ready(function() {
+$.ajax({
+url: "http://localhost/hifi11/js/demo/data.php",
+method: "GET",
+success: function(data) {
+
+    // console.log(data[0].name);
+
+    var name = [] ;
+var score = [];
+// var colors = [ ] ;
+for (var i in data) {
+name.push(data[i].name)
+score.push(data[i].score);
+// colors.push(color());
+}
+
+
+
+
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
+
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
-  type: 'doughnut',
+  type: 'polarArea',
   data: {
-    labels: ["Direct", "Referral", "Social"],
+    labels: name,
     datasets: [{
-      data: [55, 30, 15],
+      data: score,
       backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
       hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
@@ -33,3 +55,16 @@ var myPieChart = new Chart(ctx, {
     cutoutPercentage: 80,
   },
 });
+
+
+},
+error: function (data) {
+console.log(data);
+}
+
+});
+
+
+
+});
+  

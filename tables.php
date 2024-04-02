@@ -20,23 +20,29 @@ include_once('templates/topbar.php');
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                         <th>ID</th>
-                                            <th>Longtitude</th>
-                                            <th>Laptitude</th>
-                                            <th>Year</th>
-                                            <th>Flood level</th>
-                                           
-                                        </tr>
-                                    </thead>
+                                        <thead>
+                                            <tr>
+                                            <th>ID</th>
+                                                <th>Location</th>
+                                                <th>Severity</th>
+                                                <th>Year</th>
+                                                <th>Impact</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                                <!-- <th>Delete</th> -->
+                                            
+                                            </tr>
+                                        </thead>
                                     <tfoot>
                                         <tr>
                                         <th>ID</th>
-                                            <th>Longtitude</th>
-                                            <th>Laptitude</th>
-                                            <th>Year</th>
-                                            <th>Flood level</th>
+                                                <th>Location</th>
+                                                <th>Severity</th>
+                                                <th>Year</th>
+                                                <th>Impact</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            <!-- <th>Delete</th> -->
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -45,7 +51,7 @@ include_once('templates/topbar.php');
 include 'config.php';
 
 // SQL query to fetch data from the users table
-$sql = "SELECT * FROM user";
+$sql = "SELECT * FROM flood_history";
 $result = $con->query($sql);
 
 if ($result->num_rows > 0) {
@@ -57,10 +63,22 @@ if ($result->num_rows > 0) {
 
                                         <tr>
                                             <td><?php echo $row['id'];?></td>
-                                            <td><?php echo $row['logtitude'];?></td>
-                                            <td><?php echo $row['latitutde'];?></td>
+                                            <td><?php echo $row['location'];?></td>
+                                            <td><?php echo $row['severity'];?></td>
                                             <td><?php echo $row['year'];?></td>
-                                            <td><?php echo $row['level'];?></td>
+                                            <td><?php echo $row['impact'];?></td>
+                                            
+                                            <td>
+                                            <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
+</td>
+
+
+                    <td>
+    <button class="btn btn-danger btn-sm delete-btn" data-id="<?php echo $row['id']; ?>">Delete</button>
+</td>
+
+                    <!-- <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a> -->
+                
                                    
                                         </tr>
                                        <?php
@@ -69,7 +87,8 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
-                                       ?>
+                    
+                    ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -78,6 +97,43 @@ if ($result->num_rows > 0) {
 
                 </div>
                 <!-- /.container-fluid -->
+                <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this record?')) {
+                // Send AJAX request
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'delete.php', true);
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.status == 200) {
+                        // Check if deletion was successful
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            // Remove the row from the table
+                            const row = button.closest('tr');
+                            row.remove();
+                            alert(response.message);
+                        } else {
+                            alert(response.message);
+                        }
+                    } else {
+                        alert('Error: ' + xhr.statusText);
+                    }
+                };
+                xhr.onerror = function() {
+                    alert('Request failed');
+                };
+                xhr.send('id=' + id);
+            }
+        });
+    });
+});
+</script>
 
             </div>
             <!-- End of Main Content -->
