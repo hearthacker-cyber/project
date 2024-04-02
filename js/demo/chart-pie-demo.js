@@ -27,7 +27,7 @@ Chart.defaults.global.defaultFontColor = '#858796';
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
-  type: 'polarArea',
+  type: 'pie',
   data: {
     labels: name,
     datasets: [{
